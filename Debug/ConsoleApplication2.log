@@ -1,4 +1,1 @@
-﻿  CInterface.cpp
-c:\users\euge\source\repos\consoleapplication2\consoleapplication2\cinterface.cpp(77): warning C4244: =: преобразование "double" в "float", возможна потеря данных
-c:\users\euge\source\repos\consoleapplication2\consoleapplication2\cinterface.cpp(133): warning C4244: =: преобразование "double" в "float", возможна потеря данных
-  ConsoleApplication2.vcxproj -> C:\Users\euge\source\repos\ConsoleApplication2\Debug\ConsoleApplication2.exe
+﻿
