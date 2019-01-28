@@ -10,6 +10,7 @@ using namespace std;
 
 //после введения мьютекса может быть секундная задержка при проведении транзакции и двух машинах
 //необходимо протестировать при большем количестве автомобилей
+
 float parking::payment(Car *Vehicle) {
 	float newBalance = 0;
 
@@ -36,7 +37,6 @@ float parking::payment(Car *Vehicle) {
 			float transactionSum = Vehicle->GetCarBalance();
 			changeParkingBalance(Vehicle->GetCarBalance());
 			paymentLocker.unlock();
-			cout << transactionSum << "woooohoo" << endl;
 			return transactionSum;
 		}
 		paymentLocker.unlock();
@@ -44,9 +44,11 @@ float parking::payment(Car *Vehicle) {
 }
 
 void parking::changeParkingBalance(float pay) {
-	ParkingBalance =+ pay;
+	ParkingBalance = ParkingBalance + pay; //не сработал сокращённый оператор?
 }
 
+//необходимо пушить метод вручную, когда необходимо забрать машину с парковки, которой только что пополнили баланс
+//когда форсим метод вручную, то время слипа потока становится 0
 int PaymentProcessor(Car * Vehicle, parking * parkingObj) {
 	float transactionSum; 
 	
@@ -59,13 +61,13 @@ int PaymentProcessor(Car * Vehicle, parking * parkingObj) {
 			return 1;
 		};
 		transactionSum = parkingObj->payment(Vehicle);
-
+	/*
 		cout << Vehicle->GetCarType() << "  " << Vehicle->GetCarNumber() << endl;
 		cout << " Transaction sum is: " << transactionSum << endl;
 		cout << " Parking balance now is: " << parkingObj->getParkingBalance() << endl;
 		cout << "Car balance now is" << Vehicle->GetCarBalance() << endl;
 		cout << endl;
-
+		*/
 		
 		parkingObj->addTransaction(Vehicle, transactionSum);
 	
@@ -99,6 +101,7 @@ int PaymentProcessor(Car * Vehicle, parking * parkingObj) {
 
  //1 если успешно удалил
  //0 если требуется пополнение баланса машины
+ //2 если нет машины
  int parking::removeCar(string carNum) {
 	 
 	 auto itr = carList.begin();
@@ -110,9 +113,22 @@ int PaymentProcessor(Car * Vehicle, parking * parkingObj) {
 				 itr->second->timerFlagStop = true;
 				 carList.erase(itr);
 				 return 1;
-			 }
+			 } return 0;
 		 }
+		 else return 2;
 		 itr++;
+	 }
+	 
+ }
+
+Car * parking::findCar(string carNumber, Car * carptr) {
+
+	 auto itr = carList.begin();
+	 while (itr != carList.end()) {
+		 if (itr->first == carNumber) { 
+			 carptr = itr->second;
+			 return carptr; 
+		 }
 	 }
 	 return 0;
  }
@@ -132,7 +148,7 @@ int PaymentProcessor(Car * Vehicle, parking * parkingObj) {
 				transactionPtrDecrement--;
 				out.open("E:\\Transaction.log", ios::app);
 				while (transactionPtrDecrement != transactionList.begin()) {
-					cout << "Starting wrting to the file" << endl;
+					//cout << "Starting wrting to the file" << endl;
 	
 					char timepoint[70];
 					tm tmstruct;

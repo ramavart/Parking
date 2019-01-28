@@ -22,12 +22,13 @@ public:
 	~parking() { flagStopThread = true; };//удаляет листы транзакций и  машин
 	float payment(Car * Vehicle);
 	float getParkingBalance() { return ParkingBalance; }
-	//void changeParkingBalance(Car * Vehicle);
 	void changeParkingBalance(float pay);
 	int friend PaymentProcessor( Car * Vehicle, parking * parkingObj);
 	void addTransaction(Car * Vehicle, float transactionSum);//необходимо протестировать
 	int addCar(string Num, string Type, float Balance, thread * ptr);
 	int removeCar(string carNum);
+	Car * findCar(string carNumber, Car * ptr);
+
 	void writeLastTransactionsToFile();
 
 	void showTransactionLog();

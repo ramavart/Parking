@@ -9,9 +9,11 @@
 
 #include "pch.h"
 #include "parking.h"
+#include "CInterface.h"
 #include <iostream>
 #include <thread>
 #include <fstream>
+
 
 using namespace std;
 
@@ -19,27 +21,43 @@ using namespace std;
 int main()
 {
 	
-	parking & pointer = parking::instance();
+	parking * pointer = &parking::instance();
+	CInterface programInterface;
+	programInterface.showInterface(pointer);
 
-	//проверка работы метода PaymentProcessor
+	//нельзя заполнять буфер '0'
+	/*
+	float number;
+	char buf[10];
+	for (int i = 0; i < 10; i++) {
+		buf[i] = ' ';
+	}
+	cout << " Enter number please " << endl;
+	gets_s(buf, 10);
+	cout << buf << endl;
+	number = atof(buf);
+	cout << number << endl;
+	*/
 	
+	//проверка работы метода PaymentProcessor
+	/*
 	string c = "CN43908LN";
 	string ctp = "CAR";
-	float bal = 100.0;
-	
+	float bal = 100.0;*/
+	/*
 	pointer.addCar(c, ctp, 100, 0);
 	pointer.addCar("Cb48947GN", "BUS", 200, 0);
-
+	*/
 	//проверка удаления машин из списка парковки
-	
+	/*
 	this_thread::sleep_for(chrono::seconds(30));
 	pointer.showLastMinuteTransactions();
 	pointer.removeCar("Cb48947GN");
 	pointer.removeCar("CN43908LN");
 	pointer.flagStopThread = true;
-
+	*/
 	//вывод из файла лога транзакций
-	pointer.showTransactionLog();
+	//pointer.showTransactionLog();
 	//pointer.removeCar("CN30892HT");
 
 	/*
