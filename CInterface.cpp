@@ -14,10 +14,9 @@ CInterface::~CInterface()
 
 //так же необходимо предусмотреть функции выхода в меню
 //из любой части интерфейса
-//вынести пункты меню из цикла
 void CInterface::showInterface(parking * parkingInstance) {
-	char numberHolder[2];
-	numberHolder[0] = 0;
+
+	string numberHolder;
 	int pointOfMenu = 0;
 	for (;;) {
 		
@@ -33,8 +32,8 @@ void CInterface::showInterface(parking * parkingInstance) {
 			
 			while(pointOfMenu < 1 || pointOfMenu > 8){
 				cout << "Please choose the action you need and enter the proper number between 1 and 8"<<endl;
-				gets_s(numberHolder, 2);
-				pointOfMenu = atoi(numberHolder);	
+				getline(cin, numberHolder);
+				pointOfMenu = atoi(numberHolder.c_str());
 			}
 		
 		switch (pointOfMenu)
@@ -52,34 +51,27 @@ void CInterface::showInterface(parking * parkingInstance) {
 }
 
 
-//перехват исключений выход за границы ??
 void CInterface::addNewCar(parking * parkingInstance) {
-	char carNumber[11];
-	char moneyHolder[46];
-	char carTypeHolder[2];
+
+	string carNumber;
+	string moneyHolder;
+	string carTypeHolder;
 	int carTypeIndex = 0;
 	string carType;
 	float money = 0;
-	for (int i = 0; i < sizeof(carNumber) / sizeof(char); i++) {
-		carNumber[i] = '\0';
-	}
-	//реализовать тут валидацию значений
-	//нельзя заполнять '\0'
+
 	while (carNumber[0] == ' ' || carNumber[0] == '\0') {
 		cout << "Please enter car Number" << endl;
-		gets_s(carNumber, 11);
+		getline(cin, carNumber);
 	}
 	
-	//сравнить с лимитом на меньше!!!!
 	while (money <= 0 || money > numeric_limits<float>::max()) {
 		cout << "How much money would you like to put on the car balance?" << endl;
-		gets_s(moneyHolder, 46);
-		money = atof(moneyHolder);
+		getline(cin, moneyHolder);
+		money = atof(moneyHolder.c_str());
 	}
 
-
 	cout << "What is the type of your car?" << endl;
-
 	cout << "Please enter the number the corresponds to the type of your car" << endl;
 	cout << "1. Car" << endl;
 	cout << "2. Bus" << endl;
@@ -88,8 +80,8 @@ void CInterface::addNewCar(parking * parkingInstance) {
 
 	while (carTypeIndex < 1 || carTypeIndex > 4) {
 		cout << "The number should be between 1 and 4 including" << endl;
-			gets_s(carTypeHolder,2);
-			carTypeIndex = atoi(carTypeHolder);
+			getline(cin, carTypeHolder);
+			carTypeIndex = atoi(carTypeHolder.c_str());
 			cout << carTypeIndex << endl;
 	}
 
@@ -99,8 +91,6 @@ void CInterface::addNewCar(parking * parkingInstance) {
 	case 2: carType = "BUS"; break;
 	case 3: carType = "TRUCK"; break;
 	case 4: carType = "MOTORCYCLE"; break;
-	default:
-		break;
 	}
 
 	parkingInstance->addCar(carNumber,carType, money, 0);
@@ -108,20 +98,14 @@ void CInterface::addNewCar(parking * parkingInstance) {
 
 void CInterface::fillUpCarBalance(parking * parkingInstance) {
 
-	char carNumberHolder[11];
 	string carNumber;
 	Car * carptr = 0;
-	char money[47];
+	string money;
 	float paysum;
-	for (int i = 0; i < sizeof(carNumberHolder) / sizeof(char); i++)
-	{
-		carNumberHolder[i] = ' ';
-	}
 
 	for (;;) {
 			cout << "Please enter car Valid Number" << endl;
-		gets_s(carNumberHolder, 11);
-		carNumber = carNumberHolder;
+		getline(cin,carNumber);
 		cout << carNumber << endl;
 		if (carptr = parkingInstance->findCar(carNumber, carptr)) break;
 	}
@@ -129,8 +113,8 @@ void CInterface::fillUpCarBalance(parking * parkingInstance) {
 	for (; ;) {
 		cout << "Please enter a sum which you would like to put on your car balance" << endl;
 		cout << "The payment should  be less than" << fixed << numeric_limits<float>::max() << " and more than zero" << endl;
-		gets_s(money, 47);
-		paysum = atof(money);
+		getline(cin , money);
+		paysum = atof(money.c_str());
 		if (paysum > 0) {
 			if (paysum <=  numeric_limits<float>::max() ) {
 				carptr->SetCarBalance(paysum);
@@ -141,20 +125,14 @@ void CInterface::fillUpCarBalance(parking * parkingInstance) {
 	}
 }
 
+
 void CInterface::removeCar(parking * parkingInstance) {
-	char carNumberHolder[11];
 	string carNumber;
 	Car * carptr = 0;
 
-	for (int i = 0; i < sizeof(carNumberHolder) / sizeof(char); i++)
-	{
-		carNumberHolder [i] = ' ';
-	}
-
 	for (;;) {
 		cout << "Please enter car Valid Number" << endl;
-		gets_s(carNumberHolder, 11);
-		carNumber = carNumberHolder;
+		getline(cin, carNumber);
 
 		if (parkingInstance->removeCar(carNumber)) { 
 			cout << "Car has been removed" << endl;
@@ -162,6 +140,7 @@ void CInterface::removeCar(parking * parkingInstance) {
 		}
 		else if(parkingInstance->removeCar(carNumber) == 0){
 			cout << "Please fill up car balance" << endl;
+			break;
 		}
 		else break;
 	}

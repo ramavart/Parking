@@ -5,11 +5,8 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 using namespace std;
-//проверить как работает метод при нехватке на балансе машины
-//не нужно писать транзакцию если минусовой баланс на машине
 
-//после введения мьютекса может быть секундная задержка при проведении транзакции и двух машинах
-//необходимо протестировать при большем количестве автомобилей
+//не нужно писать транзакцию если минусовой баланс на машине?
 
 float parking::payment(Car *Vehicle) {
 	float newBalance = 0;
@@ -25,10 +22,6 @@ float parking::payment(Car *Vehicle) {
 	}
 	else {
 		
-		//увеличить на это значение баланс парковки
-		//изменить значение машины
-		//создать транзакцию 
-
 		while (paymentLocker.try_lock());
 		newBalance = -1 * (settings::GetDictionaryValue(Vehicle->GetCarType()) * settings::GetFine());
 		Vehicle->SetCarBalance(newBalance);
@@ -47,14 +40,11 @@ void parking::changeParkingBalance(float pay) {
 	ParkingBalance = ParkingBalance + pay; //не сработал сокращённый оператор?
 }
 
-//необходимо пушить метод вручную, когда необходимо забрать машину с парковки, которой только что пополнили баланс
-//когда форсим метод вручную, то время слипа потока становится 0
 int PaymentProcessor(Car * Vehicle, parking * parkingObj) {
 	float transactionSum; 
 	
 	for (; ;) {
 
-		if (Vehicle->GetCarType() == "BUS") this_thread::sleep_for(chrono::seconds(1));//чисто для теста
 		this_thread::sleep_for(chrono::seconds(3));//как передать сюда settings::timeoutSeconds???
 		if (Vehicle->timerFlagStop == true) {
 			delete Vehicle;
@@ -113,7 +103,7 @@ int PaymentProcessor(Car * Vehicle, parking * parkingObj) {
 				 itr->second->timerFlagStop = true;
 				 carList.erase(itr);
 				 return 1;
-			 } return 0;
+			 } else return 0;
 		 }
 		 else return 2;
 		 itr++;
@@ -133,13 +123,12 @@ Car * parking::findCar(string carNumber, Car * carptr) {
 	 return 0;
  }
 
- //использовать мьютексы для доступа к списку транзакций
  void parking::writeLastTransactionsToFile() {
 	 ofstream out;
 	 list<CTransaction *>::iterator transactionPtrDecrement;
 	 list<CTransaction *>::iterator lastMinuteEndPtr;
 	 for (; ;) {
-		 this_thread::sleep_for(chrono::seconds(20)); //перенёс со 112 строки
+		 this_thread::sleep_for(chrono::seconds(20));
 		lastMinuteEndPtr= transactionPtrDecrement = transactionList.end(); 
 				if (flagStopThread == true) return;
 				if (transactionList.empty()) {
@@ -161,7 +150,6 @@ Car * parking::findCar(string carNumber, Car * carptr) {
 				}
 				out.close();
 
-				//нужен ли тут мьютекс
 				while (!transactionLocker.try_lock());
 				transactionList.erase(transactionList.begin(), lastMinuteEndPtr);
 				transactionLocker.unlock();

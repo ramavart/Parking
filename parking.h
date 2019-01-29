@@ -12,19 +12,19 @@ using namespace std;
 class parking
 {
 public:
-	//parking (parking const&) = delete;
-	//void operator=(parking const&) = delete;
+
 	
 	static parking& instance() {
 		static parking object;
 		return object;
 	}
-	~parking() { flagStopThread = true; };//удаляет листы транзакций и  машин
+	//должен ли в конце удалять листы?
+	~parking() { flagStopThread = true; };
 	float payment(Car * Vehicle);
 	float getParkingBalance() { return ParkingBalance; }
 	void changeParkingBalance(float pay);
 	int friend PaymentProcessor( Car * Vehicle, parking * parkingObj);
-	void addTransaction(Car * Vehicle, float transactionSum);//необходимо протестировать
+	void addTransaction(Car * Vehicle, float transactionSum); 
 	int addCar(string Num, string Type, float Balance, thread * ptr);
 	int removeCar(string carNum);
 	Car * findCar(string carNumber, Car * ptr);
@@ -46,13 +46,6 @@ private:
 		WriteToFile.detach();
 	};
 
-	//не понимаю синтаксиса, нужно разобраться
-	// Don't forget to declare these two. You want to make sure they
-	// are unacceptable otherwise you may accidentally get copies of
-	// your singleton appearing.
-	
-	//parking(parking const&);        // Don't Implement
-	//void operator=(parking const&); // Don't implement
 	list <CTransaction *> transactionList;
 	list <pair<string, Car *>> carList;
 	float ParkingBalance;
