@@ -2,6 +2,8 @@
 #include "parking.h"
 #include <fstream>
 #include <time.h>
+#include <future>
+#include <functional>
 
 #define _CRT_SECURE_NO_WARNINGS
 using namespace std;
@@ -40,7 +42,7 @@ void parking::changeParkingBalance(float pay) {
 	ParkingBalance = ParkingBalance + pay; //не сработал сокращённый оператор?
 }
 
-int PaymentProcessor(Car * Vehicle, parking * parkingObj) {
+int PaymentProcessor(Car * Vehicle, parking * parkingObject) {
 	float transactionSum; 
 	
 	for (; ;) {
@@ -50,7 +52,7 @@ int PaymentProcessor(Car * Vehicle, parking * parkingObj) {
 			delete Vehicle;
 			return 1;
 		};
-		transactionSum = parkingObj->payment(Vehicle);
+		transactionSum = parkingObject->payment(Vehicle);
 	/*
 		cout << Vehicle->GetCarType() << "  " << Vehicle->GetCarNumber() << endl;
 		cout << " Transaction sum is: " << transactionSum << endl;
@@ -59,8 +61,7 @@ int PaymentProcessor(Car * Vehicle, parking * parkingObj) {
 		cout << endl;
 		*/
 		
-		parkingObj->addTransaction(Vehicle, transactionSum);
-	
+		parkingObject->addTransaction(Vehicle, transactionSum);
 	}
 	return 1;
 }
@@ -80,8 +81,12 @@ int PaymentProcessor(Car * Vehicle, parking * parkingObj) {
 		 pair <string, Car *> node(Num, Vehicle);
 		 carList.insert(carList.begin(), node);
 		 numberFreeParkingPlaces--;
-		 thread timer(&PaymentProcessor, Vehicle, this);
+		 
+		 //packaged_task<int()>task(bind(&parking::PaymentProcessor, this, Vehicle));
 
+		 thread timer(PaymentProcessor, Vehicle, this);
+
+		 //thread timer(task);
 		 Vehicle->ptimer = &timer;
 		 timer.detach();
 		 return 1;

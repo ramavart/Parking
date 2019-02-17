@@ -6,6 +6,7 @@
 #include <iostream>
 #include <mutex>
 #include <atomic> 
+#include <algorithm>
 
 using namespace std;
 
@@ -18,12 +19,23 @@ public:
 		static parking object;
 		return object;
 	}
-	//должен ли в конце удалять листы?
-	~parking() { flagStopThread = true; };
+	//должен удалять листинги
+	//1 правка
+
+	~parking() { 
+		
+		flagStopThread = true; 
+		for (auto &carPtr : carList) {
+			delete carPtr.second;
+		}
+		for (auto &trnsPtr : transactionList) {
+			delete trnsPtr;
+		}
+	};
 	float payment(Car * Vehicle);
 	float getParkingBalance() { return ParkingBalance; }
 	void changeParkingBalance(float pay);
-	int friend PaymentProcessor( Car * Vehicle, parking * parkingObj);
+	int friend PaymentProcessor( Car * Vehicle, parking * parkingObject);
 	void addTransaction(Car * Vehicle, float transactionSum); 
 	int addCar(string Num, string Type, float Balance, thread * ptr);
 	int removeCar(string carNum);
