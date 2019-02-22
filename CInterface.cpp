@@ -172,5 +172,5 @@ void CInterface::showParkingRevenue(parking * parkingInstance) {
 
 void CInterface::programEnd(parking * parkingInstance) {
 	parkingInstance->flagStopThread = true;
-	this_thread::sleep_for(chrono::seconds(20));
+	this_thread::sleep_for(settings::GetTimeoutTransactionWriting());
 }

@@ -19,27 +19,20 @@ public:
 		static parking object;
 		return object;
 	}
-	//должен удалять листинги
-	//1 правка
 
-	//так же удаление машины происходит в потоке если флаг flagStopThread установлен в true
 	~parking() { 
 		
 
 		int i = 0;
 		for (auto &carPtr : carList) {
-			cout << "round " << i << endl;
 			i++;
 			delete carPtr.second;
 
 		}
 		for (auto &trnsPtr : transactionList) {
-			cout << "found " << i << endl;
 			delete trnsPtr;
 		}
 	};
-
-	void cleanUpParking();
 
 	float payment(Car * Vehicle);
 	float getParkingBalance() { return ParkingBalance; }

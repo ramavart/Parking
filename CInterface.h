@@ -1,8 +1,9 @@
 #pragma once
 
-//класс должен реализовывать валидацию данных, согласно сигнатуре соответствующих методов
 #include <iostream>
 #include "parking.h"
+#include "settings.h"
+
 class CInterface
 {
 public:

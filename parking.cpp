@@ -42,25 +42,13 @@ void parking::changeParkingBalance(float pay) {
 	ParkingBalance = ParkingBalance + pay;
 }
 
-void parking::cleanUpParking() {
-
-	for (auto &carPtr : carList) {
-		delete carPtr.second;
-	}
-	carList.clear();
-
-	for (auto &trnsPtr : transactionList) {
-		delete trnsPtr;
-	}
-	transactionList.clear();
-}
 
 int PaymentProcessor(Car * Vehicle, parking * parkingObject) {
 	float transactionSum; 
 	
 	for (; ;) {
 
-		this_thread::sleep_for(chrono::seconds(3));//как передать сюда settings::timeoutSeconds???
+		this_thread::sleep_for(settings::GetTimeoutPayment());
 
 		
 		if (parkingObject->flagStopThread == true) {
@@ -156,7 +144,7 @@ Car * parking::findCar(string carNumber, Car * carptr) {
 	 list<CTransaction *>::iterator transactionPtrDecrement;
 	 list<CTransaction *>::iterator lastMinuteEndPtr;
 	 for (; ;) {
-		 this_thread::sleep_for(chrono::seconds(20));//вот здесь
+		 this_thread::sleep_for(settings::GetTimeoutTransactionWriting());
 
 
 		 lastMinuteEndPtr = transactionPtrDecrement = transactionList.end();
@@ -168,7 +156,7 @@ Car * parking::findCar(string carNumber, Car * carptr) {
 					continue;
 				}
 				transactionPtrDecrement--;
-				out.open("E:\\Transaction.log", ios::app);
+				out.open(settings::filepath, ios::app);
 				while (transactionPtrDecrement != transactionList.begin()) {
 					//cout << "Starting wrting to the file" << endl;
 	
@@ -192,7 +180,7 @@ Car * parking::findCar(string carNumber, Car * carptr) {
  void parking::showTransactionLog() {
 	 ifstream log;
 	 string strholder;
-	 log.open("E:\\Transaction.log", ios::in);
+	 log.open(settings::filepath, ios::in);
 	 std::getline(log, strholder, '\0');
 	 cout <<" this is transaction log " << endl;
 	 cout << strholder << endl;
