@@ -29,9 +29,10 @@ void CInterface::showInterface(parking * parkingInstance) {
 			cout << "6. Show parking revenue" << endl;
 			cout << "7. Show number of free parking spaces" << endl;
 			cout << "8. Show transaction Log" << endl;
+			cout << "9. End the programm" << endl;
 			
-			while(pointOfMenu < 1 || pointOfMenu > 8){
-				cout << "Please choose the action you need and enter the proper number between 1 and 8"<<endl;
+			while(pointOfMenu < 1 || pointOfMenu > 9){
+				cout << "Please choose the action you need and enter the proper number between 1 and 9"<<endl;
 				getline(cin, numberHolder);
 				pointOfMenu = atoi(numberHolder.c_str());
 			}
@@ -46,7 +47,10 @@ void CInterface::showInterface(parking * parkingInstance) {
 		case 6: showParkingRevenue(parkingInstance); pointOfMenu = 0; break;
 		case 7: showNumberFreePlaces(parkingInstance); pointOfMenu = 0; break;
 		case 8: showTransactionLog(parkingInstance); pointOfMenu = 0; break;
+		case 9: programEnd(parkingInstance); break;
 		}
+
+		if (pointOfMenu == 9) break;
 	}
 }
 
@@ -164,4 +168,9 @@ void CInterface::showNumberFreePlaces(parking * parkingInstance) {
 
 void CInterface::showParkingRevenue(parking * parkingInstance) {
 	cout << "Parking revenue now is: " << parkingInstance->getParkingBalance() << endl;
+}
+
+void CInterface::programEnd(parking * parkingInstance) {
+	parkingInstance->flagStopThread = true;
+	this_thread::sleep_for(chrono::seconds(20));
 }

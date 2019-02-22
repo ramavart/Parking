@@ -17,5 +17,6 @@ public:
 	void showNumberFreePlaces(parking * parkingInstance);
 	void showParkingRevenue(parking * parkingInstance);
 	void showLastMinuteParkingRevenue(parking * parkingInstance);
+	void programEnd(parking * parkingInstance);
 };
 

@@ -26,6 +26,8 @@ protected:
 	static float Fine;
 	static map <string, int> Dictionary;
 	static int timeoutSeconds;
+	//static chrono::duration<long long> timeoutSeconds;
+	//static chrono::
 };
 
 

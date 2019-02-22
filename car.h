@@ -6,7 +6,9 @@
 #include <atomic> 
 
 using namespace std;
-//написать метод который будет автоматически деньги на счет парковки при пополнении минусового баланса
+//можно написать метод который будет автоматически деньги на счет парковки при пополнении минусового баланса
+//ptimer походу никак не используется надо удалить
+
 class Car
 {
 public:
@@ -15,7 +17,7 @@ public:
 		Count++;
 		id = Count;
 	};
-	~Car() {};
+	~Car() { cout << "car has been deleted" << endl; };
 	int GetCarID() { return id; };
 	string GetCarNumber() { return CarNumber; };
 	void SetCarNumber(string value) { CarNumber = value; };
