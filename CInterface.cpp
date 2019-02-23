@@ -106,7 +106,7 @@ void CInterface::fillUpCarBalance(parking * parkingInstance) {
 	Car * carptr = 0;
 	string money;
 	float paysum;
-
+	//
 	for (;;) {
 			cout << "Please enter car Valid Number" << endl;
 		getline(cin,carNumber);
@@ -136,9 +136,10 @@ void CInterface::removeCar(parking * parkingInstance) {
 
 	for (;;) {
 		cout << "Please enter car Valid Number" << endl;
+		cout << "If you want to go back to the menu, press m + ENTER" << endl;
 		getline(cin, carNumber);
 
-		if (parkingInstance->removeCar(carNumber)) { 
+		if (parkingInstance->removeCar(carNumber) == 1) { 
 			cout << "Car has been removed" << endl;
 			return; 
 		}
@@ -146,7 +147,7 @@ void CInterface::removeCar(parking * parkingInstance) {
 			cout << "Please fill up car balance" << endl;
 			break;
 		}
-		else break;
+		else if (carNumber == "m") break;
 	}
 }
 
