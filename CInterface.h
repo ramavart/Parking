@@ -7,8 +7,8 @@
 class CInterface
 {
 public:
-	CInterface();
-	~CInterface();
+	CInterface() = default;
+	~CInterface() = default;
 	void showInterface(parking * object);
 	void addNewCar(parking * parkingInstance);
 	void fillUpCarBalance(parking * parkingInsatance);

@@ -3,17 +3,6 @@
 
 using namespace std;
 
-CInterface::CInterface()
-{
-}
-
-
-CInterface::~CInterface()
-{
-}
-
-//так же необходимо предусмотреть функции выхода в меню
-//из любой части интерфейса
 void CInterface::showInterface(parking * parkingInstance) {
 
 	string numberHolder;
@@ -29,7 +18,7 @@ void CInterface::showInterface(parking * parkingInstance) {
 			cout << "6. Show parking revenue" << endl;
 			cout << "7. Show number of free parking spaces" << endl;
 			cout << "8. Show transaction Log" << endl;
-			cout << "9. End the programm" << endl;
+			cout << "9. End the program" << endl;
 			
 			while(pointOfMenu < 1 || pointOfMenu > 9){
 				cout << "Please choose the action you need and enter the proper number between 1 and 9"<<endl;
@@ -66,12 +55,17 @@ void CInterface::addNewCar(parking * parkingInstance) {
 
 	while (carNumber[0] == ' ' || carNumber[0] == '\0') {
 		cout << "Please enter car Number" << endl;
+		cout << "If you want to go back to the menu, press m + ENTER" << endl;
+		
 		getline(cin, carNumber);
+		if (carNumber == "m") return;
 	}
 	
 	while (money <= 0 || money > numeric_limits<float>::max()) {
 		cout << "How much money would you like to put on the car balance?" << endl;
+		cout << "If you want to go back to the menu, press m + ENTER" << endl;
 		getline(cin, moneyHolder);
+		if (moneyHolder == "m") return;
 		money = atof(moneyHolder.c_str());
 	}
 
@@ -84,9 +78,12 @@ void CInterface::addNewCar(parking * parkingInstance) {
 
 	while (carTypeIndex < 1 || carTypeIndex > 4) {
 		cout << "The number should be between 1 and 4 including" << endl;
+		cout << "If you want to go back to the menu, press m + ENTER" << endl;
+		
 			getline(cin, carTypeHolder);
+			if (carTypeHolder == "m") return;
 			carTypeIndex = atoi(carTypeHolder.c_str());
-			cout << carTypeIndex << endl;
+			//cout << carTypeIndex << endl;
 	}
 
 	switch (carTypeIndex)
@@ -106,18 +103,23 @@ void CInterface::fillUpCarBalance(parking * parkingInstance) {
 	Car * carptr = 0;
 	string money;
 	float paysum;
-	//
+
+	
 	for (;;) {
 			cout << "Please enter car Valid Number" << endl;
+			cout << "If you want to go back to the menu, press m + ENTER" << endl;
 		getline(cin,carNumber);
 		cout << carNumber << endl;
 		if (carptr = parkingInstance->findCar(carNumber, carptr)) break;
+		if (carNumber == "m") return;
 	}
 	
 	for (; ;) {
 		cout << "Please enter a sum which you would like to put on your car balance" << endl;
 		cout << "The payment should  be less than" << fixed << numeric_limits<float>::max() << " and more than zero" << endl;
+		cout << "If you want to go back to the menu, press m + ENTER" << endl;
 		getline(cin , money);
+		if (money == "m") return;
 		paysum = atof(money.c_str());
 		if (paysum > 0) {
 			if (paysum <=  numeric_limits<float>::max() ) {

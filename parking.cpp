@@ -8,14 +8,12 @@
 #define _CRT_SECURE_NO_WARNINGS
 using namespace std;
 
-//не нужно писать транзакцию если минусовой баланс на машине?
-
 float parking::payment(Car *Vehicle) {
 	float newBalance = 0;
 
 
 	if (Vehicle->GetCarBalance() > settings::GetDictionaryValue(Vehicle->GetCarType())) {
-		newBalance = -1.0 * (settings::GetDictionaryValue(Vehicle->GetCarType()));
+		newBalance = -1 *(settings::GetDictionaryValue(Vehicle->GetCarType()));
 		while(!paymentLocker.try_lock());
 		Vehicle->SetCarBalance(newBalance);
 		changeParkingBalance((-1*newBalance));
@@ -42,7 +40,8 @@ void parking::changeParkingBalance(float pay) {
 	ParkingBalance = ParkingBalance + pay;
 }
 
-
+//it creates even nan transactions
+//by design
 int PaymentProcessor(Car * Vehicle, parking * parkingObject) {
 	float transactionSum; 
 	
@@ -138,7 +137,6 @@ Car * parking::findCar(string carNumber, Car * carptr) {
 	 return 0;
  }
 
-//необходимо передать время записи
  void parking::writeLastTransactionsToFile() {
 	 ofstream out;
 	 list<CTransaction *>::iterator transactionPtrDecrement;
@@ -161,7 +159,6 @@ Car * parking::findCar(string carNumber, Car * carptr) {
 					//cout << "Starting wrting to the file" << endl;
 	
 					char timepoint[70];
-					tm tmstruct;
 					asctime_s(timepoint, sizeof timepoint, gmtime((*transactionPtrDecrement)->getDate()));
 						out << "System car ID: " << (*transactionPtrDecrement)->getCarId() << " || " << "Car Number: " << (*transactionPtrDecrement)->getCarNumber() << " || " <<
 						"Sum : " << (*transactionPtrDecrement)->getTransactionSum() << " || " << "Date: " << timepoint << endl;
@@ -206,7 +203,6 @@ Car * parking::findCar(string carNumber, Car * carptr) {
 		 transactionPtrDecrement--;
 		 while (transactionPtrDecrement != transactionList.begin()) {
 			 char timepoint[70];
-			 tm tmstruct;
 			 asctime_s(timepoint, sizeof timepoint, gmtime((*transactionPtrDecrement)->getDate()));
 			 cout << "System car ID: " << (*transactionPtrDecrement)->getCarId() << " || " << "Car Number: " << (*transactionPtrDecrement)->getCarNumber() << " || " <<
 				 "Sum : " << (*transactionPtrDecrement)->getTransactionSum() << " || " << "Date: " << timepoint << endl;
